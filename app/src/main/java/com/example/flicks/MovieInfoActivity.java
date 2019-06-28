@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -157,11 +158,22 @@ public class MovieInfoActivity extends YouTubeBaseActivity {
                 try {
                     // Get the youtube video key from the response
                     JSONArray results = response.getJSONArray("results");
-                    String trailerKey = results.getJSONObject(0).getString("key");
 
-                    Log.i("MovieTrailerActivity", String.format("Trailer Key", trailerKey));
+                    // Loop through results to find a valid video
+                    for(int i = 0; i < results.length(); i++) {
+                        JSONObject result = results.getJSONObject(i);
+                        if(result.getString("site").equals("YouTube")) {
+                            String trailerKey = result.getString("key");
+                            Log.i("MovieInfoActivity", "Trailer Key" + trailerKey);
+                            playVideo(trailerKey);
+                            return;
+                        }
+                    }
 
-                    getTrailerKey(trailerKey);
+                    // No video to play, notify user
+                    Toast.makeText(MovieInfoActivity.this,
+                            "No videos found!",
+                            Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     Log.e("MovieTrailerActivity", "Error parsing trailer key", e);
                 }
@@ -181,7 +193,7 @@ public class MovieInfoActivity extends YouTubeBaseActivity {
      * Start playing a youtube video
      * @param videoKey the key of the video to play
      */
-    private void getTrailerKey(String videoKey) {
+    private void playVideo(String videoKey) {
         // resolve the player view from the layout
         YouTubePlayerView playerView = findViewById(R.id.player);
 
