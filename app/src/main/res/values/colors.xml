@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#c0392b</color>
+    <color name="colorPrimaryDark">#86271e</color>
+    <color name="colorAccent">#f1c40f</color>
+    <color name="silver">#bdc3c7</color>
+    <color name="sunflower">#f1c40f</color>
+    <color name="asbestos">#7F8C8D</color>
+    <color name="concrete">#95a5a6</color>
+    <color name="clouds">#ECF0F1</color>
+    <color name="midnight">#2C3E50</color>
+    <color name="asphalt">#34495E</color>
+</resources>
