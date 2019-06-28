@@ -92,7 +92,7 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Load the next page of movies from the now playing api endpoint
      */
     private void loadNextPage() {
         // If we are already loading pages then ignore this call
