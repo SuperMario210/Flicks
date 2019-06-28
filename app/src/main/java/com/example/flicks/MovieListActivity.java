@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,8 @@ public class MovieListActivity extends AppCompatActivity {
     public static final String API_BASE_URL = "https://api.themoviedb.org/3";
     // Parameter name for the API key
     public static final String API_KEY_PARAM = "api_key";
+    // Parameter name for the page
+    public static final String PAGE_PARAM = "page";
 
     // tag for logging from this activity
     public static final String TAG = "MovieListActivity";
@@ -48,6 +51,12 @@ public class MovieListActivity extends AppCompatActivity {
     // Image config
     Config config;
 
+    // The next page of movies to load
+    int nextPage;
+
+    // Prevent multiple concurrent calls to loadNextPage()
+    boolean loadingPages;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +74,39 @@ public class MovieListActivity extends AppCompatActivity {
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
         rvMovies.setAdapter(adapter);
 
+        // Make the recycler view load more movies when we scroll to the end
+        nextPage = 1;
+        loadingPages = false;
+        rvMovies.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                // Have we reached the bottom of the recycler view
+                if (!recyclerView.canScrollVertically(1)) {
+                    // Load more movies
+                    loadNextPage();
+                }
+            }
+        });
+
         getConfiguration();
     }
 
     /**
      *
      */
-    private void getNowPlaying() {
+    private void loadNextPage() {
+        // If we are already loading pages then ignore this call
+        if(loadingPages) return;
+
+        // Block other calls to loadNextPage()
+        loadingPages = true;
+
         String url = API_BASE_URL + "/movie/now_playing";
 
+        // Setup the request parameters
         RequestParams params = new RequestParams();
         params.add(API_KEY_PARAM, getString(R.string.movies_api_key));
+        params.add(PAGE_PARAM, "" + nextPage++);
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -88,6 +119,10 @@ public class MovieListActivity extends AppCompatActivity {
                         // notify the adapter to update the view
                         adapter.notifyItemInserted(movies.size() - 1);
                     }
+
+                    // Free other calls to loadNextPage()
+                    loadingPages = false;
+
                     Log.i(TAG, String.format("Loaded %s movies", results.length()));
                 } catch (JSONException e) {
                     logError("Failed to parse data from now_playing", e, true);
@@ -99,6 +134,8 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString,
                                   Throwable throwable) {
+                // Free other calls to loadNextPage()
+                loadingPages = false;
                 logError("Failed to get data from now_playing", throwable, true);
             }
         });
@@ -107,6 +144,7 @@ public class MovieListActivity extends AppCompatActivity {
     private void getConfiguration() {
         String url = API_BASE_URL + "/configuration";
 
+        // Setup the request parameters
         RequestParams params = new RequestParams();
         params.add(API_KEY_PARAM, getString(R.string.movies_api_key));
 
@@ -114,6 +152,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
+                    // Store the config information
                     config = new Config(response);
                     Log.i(TAG, String.format("Loaded config with base_url %s and poster_size %s",
                             config.getImageBaseUrl(),
@@ -121,7 +160,8 @@ public class MovieListActivity extends AppCompatActivity {
 
                     adapter.setConfig(config);
 
-                    getNowPlaying();
+                    // Load the movies
+                    loadNextPage();
                 } catch (JSONException e) {
                     logError("Failed to parse configuration", e, true);
                 }
