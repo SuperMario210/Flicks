@@ -18,6 +18,7 @@ public class Movie {
     private String backdropPath; // not the full URL
     private String releaseDate;
     private double rating;
+    private int id;
 
     // Initialize from JSON data
     public Movie(JSONObject object) throws JSONException {
@@ -27,6 +28,7 @@ public class Movie {
         backdropPath = object.getString("backdrop_path");
         releaseDate = parseDate(object.getString("release_date"));
         rating = object.getDouble("vote_average");
+        id = object.getInt("id");
     }
 
     public Movie(Intent i) {
@@ -36,6 +38,7 @@ public class Movie {
         backdropPath = i.getStringExtra("backdropPath");
         releaseDate = i.getStringExtra("releaseDate");
         rating = i.getDoubleExtra("rating", 0);
+        id = i.getIntExtra("id", 0);
     }
 
     public void putIntent(Intent i) {
@@ -45,6 +48,7 @@ public class Movie {
         i.putExtra("backdropPath", backdropPath);
         i.putExtra("releaseDate", releaseDate);
         i.putExtra("rating", rating);
+        i.putExtra("id", id);
     }
 
     private String parseDate(String inputDate) {
@@ -98,5 +102,9 @@ public class Movie {
 
     public double getRating() {
         return rating;
+    }
+
+    public int getId() {
+        return id;
     }
 }

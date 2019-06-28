@@ -4,10 +4,11 @@
     <color name="colorPrimaryDark">#86271e</color>
     <color name="colorAccent">#f1c40f</color>
     <color name="silver">#bdc3c7</color>
-    <color name="sunflower">#f1c40f</color>
+    <color name="sunflower">#F1C40F</color>
     <color name="asbestos">#7F8C8D</color>
     <color name="concrete">#95a5a6</color>
     <color name="clouds">#ECF0F1</color>
     <color name="midnight">#2C3E50</color>
     <color name="asphalt">#34495E</color>
+    <color name="asphaltTransparent">#5534495E</color>
 </resources>

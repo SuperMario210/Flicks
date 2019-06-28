@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/ivBackdropImage"
-        android:layout_width="400dp"
+        android:layout_width="380dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"

@@ -26,18 +26,34 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+/**
+ * Adapter for displaying an arraylist of Movies in a RecyclerView
+ */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     // List of movies
     private ArrayList<Movie> movies;
-    private Config config;
-    private Context context;
-    private RecyclerView recyclerView; // reference to the recycler view this adapter is attached to
 
+    // MoviesDB config information
+    private Config config;
+
+    // Stores the context of the view holder
+    private Context context;
+
+    // reference to the recycler view this adapter is attached to
+    private RecyclerView recyclerView;
+
+    /**
+     * Sets the moviesDB config information of this adapter
+     * @param config
+     */
     public void setConfig(Config config) {
         this.config = config;
     }
 
-    // Initialize with list
+    /**
+     * Initializes a new MovieAdapter with a list of Movies
+     * @param movies the list of movies to display in the RecyclerView
+     */
     public MovieAdapter(ArrayList<Movie> movies) {
         this.movies = movies;
     }
@@ -56,6 +72,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
     }
 
+    /**
+     * Override the method so that we store a reference to the recyclerView this adapter is attached
+     * to
+     * @param recyclerView
+     */
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -63,7 +84,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         this.recyclerView = recyclerView;
     }
 
-    // Creates and inflates a new view
+    /**
+     * Creates and inflates a new view
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,19 +96,28 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         // Create the view using the item_movie layout
         View movieItemView = inflater.inflate(R.layout.item_movie, parent, false);
+
+        // Set an on click listener to start the movie info activity
         movieItemView.setOnClickListener((final View view) -> {
+            // Figure out which movie was clicked
             int index = recyclerView.getChildLayoutPosition(view);
             Movie movie = movies.get(index);
+
+            // Store the movie and url information in the intent
             Intent i = new Intent(context, MovieInfoActivity.class);
             movie.putIntent(i);
             i.putExtra("backdropUrl", config.getImageUrl(config.getBackdropSize(), ""));
+            i.putExtra("posterUrl", config.getImageUrl(config.getPosterSize(), ""));
+
             context.startActivity(i);
         });
 
         return new ViewHolder(movieItemView);
     }
 
-    // Binds an inflated view to a new item
+    /**
+     * Binds an inflated view to a new item
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // get the movie data at the specified position
@@ -96,7 +128,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         holder.tvOverview.setText(movie.getAbbreviatedOverview());
 
         // get the device orientation
-        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        boolean isPortrait = context.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT;
 
         // get the correct url based on the device orientation
         String imageUrl;
@@ -107,7 +140,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
 
         // get the placeholder and image view ids for the current orientation
-        int placeholderId = isPortrait ? R.drawable.flicks_movie_placeholder : R.drawable.flicks_backdrop_placeholder;
+        int placeholderId = isPortrait ? R.drawable.flicks_movie_placeholder :
+                R.drawable.flicks_backdrop_placeholder;
         ImageView imageView =   isPortrait ? holder.ivPosterImage : holder.ivBackdropImage;
 
         // set the movie poster image
@@ -121,6 +155,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     }
 
+    /**
+     * @return the number of items in the adapter
+     */
     @Override
     public int getItemCount() {
         return movies.size();

@@ -68,11 +68,14 @@ public class MovieListActivity extends AppCompatActivity {
         getConfiguration();
     }
 
+    /**
+     *
+     */
     private void getNowPlaying() {
         String url = API_BASE_URL + "/movie/now_playing";
 
         RequestParams params = new RequestParams();
-        params.add(API_KEY_PARAM, getString(R.string.api_key));
+        params.add(API_KEY_PARAM, getString(R.string.movies_api_key));
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -87,15 +90,16 @@ public class MovieListActivity extends AppCompatActivity {
                     }
                     Log.i(TAG, String.format("Loaded %s movies", results.length()));
                 } catch (JSONException e) {
-                    logError("Failed to parse data from now_playing endpoint", e, true);
+                    logError("Failed to parse data from now_playing", e, true);
                 }
 
 
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                logError("Failed to get data from now_playing endpoint", throwable, true);
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
+                logError("Failed to get data from now_playing", throwable, true);
             }
         });
     }
@@ -104,7 +108,7 @@ public class MovieListActivity extends AppCompatActivity {
         String url = API_BASE_URL + "/configuration";
 
         RequestParams params = new RequestParams();
-        params.add(API_KEY_PARAM, getString(R.string.api_key));
+        params.add(API_KEY_PARAM, getString(R.string.movies_api_key));
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -126,7 +130,8 @@ public class MovieListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
                 logError("Failed to get API configuration", throwable, true);
             }
         });

@@ -68,10 +68,28 @@
         android:id="@+id/ivPosterImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:onClick="getTrailerKey"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="W,3:4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/flicks_movie_placeholder" />
+
+    <ImageView
+        android:id="@+id/ivPlayButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPosterImage"
+        app:layout_constraintEnd_toEndOf="@+id/ivPosterImage"
+        app:layout_constraintStart_toStartOf="@+id/ivPosterImage"
+        app:layout_constraintTop_toTopOf="@+id/ivPosterImage"
+        app:srcCompat="@drawable/play" />
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
