@@ -25,6 +25,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,7 +76,7 @@ public class MovieInfoActivity extends YouTubeBaseActivity {
      * Retrieves movie and url data stored in the intent
      */
     private void retrieveIntentData() {
-        movie = new Movie(getIntent());
+        movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
         backdropUrl = getIntent().getStringExtra("backdropUrl");
         posterUrl = getIntent().getStringExtra("posterUrl");
     }

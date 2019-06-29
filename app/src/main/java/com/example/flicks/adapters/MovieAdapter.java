@@ -20,6 +20,8 @@ import com.example.flicks.R;
 import com.example.flicks.models.Config;
 import com.example.flicks.models.Movie;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -105,7 +107,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
             // Store the movie and url information in the intent
             Intent i = new Intent(context, MovieInfoActivity.class);
-            movie.putIntent(i);
+            i.putExtra("movie", Parcels.wrap(movie));
             i.putExtra("backdropUrl", config.getImageUrl(config.getBackdropSize(), ""));
             i.putExtra("posterUrl", config.getImageUrl(config.getPosterSize(), ""));
 

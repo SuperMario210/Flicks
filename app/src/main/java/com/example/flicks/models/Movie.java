@@ -1,24 +1,28 @@
 package com.example.flicks.models;
 
-import android.content.Intent;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Parcel
 public class Movie {
     // Values from the API
-    private String title;
-    private String overview;
-    private String posterPath; // not the full URL
-    private String backdropPath; // not the full URL
-    private String releaseDate;
-    private double rating;
-    private int id;
+    String title;
+    String overview;
+    String posterPath; // not the full URL
+    String backdropPath; // not the full URL
+    String releaseDate;
+    double rating;
+    int id;
+
+    public Movie() {
+    }
 
     // Initialize from JSON data
     public Movie(JSONObject object) throws JSONException {
@@ -29,26 +33,6 @@ public class Movie {
         releaseDate = parseDate(object.getString("release_date"));
         rating = object.getDouble("vote_average");
         id = object.getInt("id");
-    }
-
-    public Movie(Intent i) {
-        title = i.getStringExtra("title");
-        overview = i.getStringExtra("overview");
-        posterPath = i.getStringExtra("posterPath");
-        backdropPath = i.getStringExtra("backdropPath");
-        releaseDate = i.getStringExtra("releaseDate");
-        rating = i.getDoubleExtra("rating", 0);
-        id = i.getIntExtra("id", 0);
-    }
-
-    public void putIntent(Intent i) {
-        i.putExtra("title", title);
-        i.putExtra("overview", overview);
-        i.putExtra("posterPath", posterPath);
-        i.putExtra("backdropPath", backdropPath);
-        i.putExtra("releaseDate", releaseDate);
-        i.putExtra("rating", rating);
-        i.putExtra("id", id);
     }
 
     private String parseDate(String inputDate) {
