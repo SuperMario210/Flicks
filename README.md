@@ -32,11 +32,11 @@ Here's a walkthrough of implemented user stories:
 
 **Portrait**
 
-<img src='flicks_portrait.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='flicks_portrait1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 **Landscape**
 
-<img src='flicks_landscape.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='flicks_landscape1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIFs created with [LiceCap](http://www.cockos.com/licecap/).
 
